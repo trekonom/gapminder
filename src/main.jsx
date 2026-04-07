@@ -10,8 +10,8 @@ const height = 480;
 const MARGIN = {
   top: 10,
   right: 30,
-  bottom: 50,
-  left: 40,
+  bottom: 40,
+  left: 45,
 };
 
 createRoot(document.getElementById("root")).render(

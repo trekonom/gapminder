@@ -91,7 +91,7 @@ export const AxisLeft = ({
       {title && (
         <text
           x={-height / 2}
-          y={-25}
+          y={-30}
           textAnchor="middle"
           transform="rotate(-90)"
           className="axis-title"
