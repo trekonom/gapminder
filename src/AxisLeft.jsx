@@ -26,6 +26,30 @@ export const GridLeft = ({ value, yScale, boundsWidth }) => (
   </g>
 );
 
+export const SubtitleLeft = ({ subtitle }) => (
+  <g>
+    <rect
+      x={1}
+      y={0}
+      width={12 + 4}
+      height={measureTextWidth(subtitle, "axis-subtitle") + 4}
+      fill="var(--background)"
+      className="label-bg"
+      style={{ transition: "opacity 150ms ease" }}
+    />
+    <text
+      x={0}
+      y={0}
+      textAnchor="end"
+      alignmentBaseline="before-edge"
+      transform="rotate(-90)"
+      className="axis-subtitle"
+    >
+      {subtitle}
+    </text>
+  </g>
+);
+
 export const AxisLeft = ({
   yScale,
   pixelsPerTick,
@@ -76,29 +100,7 @@ export const AxisLeft = ({
         </text>
       )}
       {/* Axis subtitle */}
-      {subtitle && (
-        <g>
-          <rect
-            x={1}
-            y={0}
-            width={12 + 4}
-            height={measureTextWidth(subtitle, "axis-subtitle") + 4}
-            fill="var(--background)"
-            className="label-bg"
-            style={{ transition: "opacity 150ms ease" }}
-          />
-          <text
-            x={0}
-            y={0}
-            textAnchor="end"
-            alignmentBaseline="before-edge"
-            transform="rotate(-90)"
-            className="axis-subtitle"
-          >
-            {subtitle}
-          </text>
-        </g>
-      )}
+      {subtitle && <SubtitleLeft subtitle={subtitle} />}
     </>
   );
 };

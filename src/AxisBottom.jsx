@@ -26,6 +26,23 @@ export const GridBottom = ({ value, xScale, boundsHeight }) => (
   </g>
 );
 
+export const SubtitleBottom = ({ subtitle, width }) => (
+  <g>
+    <rect
+      x={width - measureTextWidth(subtitle, "axis-subtitle") - 2}
+      y={-6 - 12 - 2}
+      width={measureTextWidth(subtitle, "axis-subtitle") + 4}
+      height={12 + 4}
+      fill="var(--background)"
+      className="label-bg"
+      style={{ transition: "opacity 150ms ease" }}
+    />
+    <text x={width} y={-6} className="axis-subtitle" textAnchor="end">
+      {subtitle}
+    </text>
+  </g>
+);
+
 export const AxisBottom = ({
   xScale,
   pixelsPerTick,
@@ -82,22 +99,7 @@ export const AxisBottom = ({
         </text>
       )}
       {/* Axis subtitle */}
-      {subtitle && (
-        <g>
-          <rect
-            x={width - measureTextWidth(subtitle, "axis-subtitle") - 2}
-            y={-6 - 12 - 2}
-            width={measureTextWidth(subtitle, "axis-subtitle") + 4}
-            height={12 + 4}
-            fill="var(--background)"
-            className="label-bg"
-            style={{ transition: "opacity 150ms ease" }}
-          />
-          <text x={width} y={-6} className="axis-subtitle" textAnchor="end">
-            {subtitle}
-          </text>
-        </g>
-      )}
+      {subtitle && <SubtitleBottom subtitle={subtitle} width={width} />}
     </>
   );
 };

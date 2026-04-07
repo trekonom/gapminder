@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "./BubbleChart.css";
 import * as d3 from "d3";
-import { AxisBottom, TickBottom } from "./AxisBottom";
-import { AxisLeft, TickLeft } from "./AxisLeft";
+import { AxisBottom, TickBottom, SubtitleBottom } from "./AxisBottom";
+import { AxisLeft, TickLeft, SubtitleLeft } from "./AxisLeft";
 
 export default function BubbleChart({ data, width, height, margin }) {
   const [hoveredCountry, setHoveredCountry] = useState(null);
@@ -165,7 +165,6 @@ export default function BubbleChart({ data, width, height, margin }) {
             <AxisBottom
               xScale={xScale}
               title="GDP per capita"
-              subtitle="PPP (constant 2007 international $)"
               boundsHeight={boundsHeight}
               ticks={xTicks}
               opacity={hoveredCountry ? 0.2 : 1}
@@ -187,7 +186,6 @@ export default function BubbleChart({ data, width, height, margin }) {
             yScale={yScale}
             pixelsPerTick={60}
             title="Life Expectancy"
-            subtitle="at birth"
             boundsWidth={boundsWidth}
             opacity={hoveredCountry ? 0.2 : 1}
           />
@@ -199,6 +197,13 @@ export default function BubbleChart({ data, width, height, margin }) {
               boundsWidth={boundsWidth}
             />
           )}
+          <g transform={`translate(0, ${boundsHeight})`}>
+            <SubtitleBottom
+              subtitle="PPP (constant 2007 international $)"
+              width={boundsWidth}
+            />
+          </g>
+          <SubtitleLeft subtitle="at birth" />
         </g>
       </svg>
       {footer}
