@@ -63,12 +63,15 @@ export default function BubbleChart({ data, width, height, margin }) {
     <div className="header" style={{ width: width }}>
       <div className="headerLine" />
       <div className="headerBox" />
-      <span className="title">Gapminder World Health Chart</span>
+      <span className="title">
+        As income doubles, life expectancy rises by roughly 5 years
+      </span>
       <br />
       <span className="subtitle">
-        This chart maps countries by health and wealth: Up and down show
-        healthier to sicker; left and right show poorer to richer. Each bubble
-        represents a country’s average life expectancy and income in 2007.
+        The Gapminder World Health Chart maps countries by health and wealth: Up
+        and down show healthier to sicker; left and right show poorer to richer.
+        Each bubble represents a country’s average life expectancy and income in
+        2007.
       </span>
     </div>
   );
