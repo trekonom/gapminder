@@ -3,6 +3,7 @@ import "./BubbleChart.css";
 import * as d3 from "d3";
 import { AxisBottom, TickBottom, SubtitleBottom } from "./AxisBottom";
 import { AxisLeft, TickLeft, SubtitleLeft } from "./AxisLeft";
+import { GuideSize } from "./GuideSize";
 
 export default function BubbleChart({ data, width, height, margin }) {
   const [hoveredCountry, setHoveredCountry] = useState(null);
@@ -18,7 +19,7 @@ export default function BubbleChart({ data, width, height, margin }) {
   const minValueSize = d3.min(data, (d) => d.pop);
 
   const minValueGridX = Math.max(Math.floor(minValueX / 1e3), 0.24) * 1e3;
-  const maxValueGridX = 80000; //Math.ceil(maxValueX / 1e3) * 1e3;
+  const maxValueGridX = 100000; //Math.ceil(maxValueX / 1e3) * 1e3;
   const minValueGridY = 19; //Math.floor(minValueY / 1) * 1;
   const maxValueGridY = 95; //Math.ceil(maxValueY / 1) * 1;
   const maxValueGridSize = Math.ceil(maxValueSize / 1e6) * 1e6;
@@ -34,6 +35,13 @@ export default function BubbleChart({ data, width, height, margin }) {
     { value: 16000, label: "16k" },
     { value: 32000, label: "32k" },
     { value: 64000, label: "64k" },
+  ];
+
+  const sizeTicks = [
+    { value: 1e6, label: "1" },
+    { value: 1e7, label: "10" },
+    { value: 1e8, label: "100" },
+    { value: 1e9, label: "1000" },
   ];
 
   const xScale = d3
@@ -207,6 +215,17 @@ export default function BubbleChart({ data, width, height, margin }) {
             />
           </g>
           <SubtitleLeft subtitle="at birth" />
+
+          <g
+            transform={`translate(${0.75 * boundsWidth}, ${0.55 * boundsHeight})`}
+          >
+            <GuideSize scale={sizeScale} ticks={sizeTicks} opacity={0.8} />
+          </g>
+          <g
+            transform={`translate(${0.75 * boundsWidth}, ${0.825 * boundsHeight})`}
+          >
+            <GuideSize scale={sizeScale} ticks={sizeTicks} opacity={0.8} />
+          </g>
         </g>
       </svg>
       {footer}
