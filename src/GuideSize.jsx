@@ -71,7 +71,7 @@ export const GuideSize = ({ scale, ticks, opacity }) => {
               {label}
               {i === 3 && " "}
               {i === 3 && (
-                <tspan x={0} dy={"1.2em"}>
+                <tspan x={0} dy={10}>
                   million
                 </tspan>
               )}
