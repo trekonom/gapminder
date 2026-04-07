@@ -4,6 +4,8 @@ import * as d3 from "d3";
 import { AxisBottom, TickBottom, SubtitleBottom } from "./AxisBottom";
 import { AxisLeft, TickLeft, SubtitleLeft } from "./AxisLeft";
 import { GuideSize } from "./GuideSize";
+import { GuideColor } from "./GuideColor";
+import { computeGuideSize } from "./utils";
 
 export default function BubbleChart({ data, width, height, margin }) {
   const [hoveredCountry, setHoveredCountry] = useState(null);
@@ -19,7 +21,7 @@ export default function BubbleChart({ data, width, height, margin }) {
   const minValueSize = d3.min(data, (d) => d.pop);
 
   const minValueGridX = Math.max(Math.floor(minValueX / 1e3), 0.24) * 1e3;
-  const maxValueGridX = 100000; //Math.ceil(maxValueX / 1e3) * 1e3;
+  const maxValueGridX = 120000; //Math.ceil(maxValueX / 1e3) * 1e3;
   const minValueGridY = 19; //Math.floor(minValueY / 1) * 1;
   const maxValueGridY = 95; //Math.ceil(maxValueY / 1) * 1;
   const maxValueGridSize = Math.ceil(maxValueSize / 1e6) * 1e6;
@@ -66,6 +68,8 @@ export default function BubbleChart({ data, width, height, margin }) {
       "var(--asia-color)",
       "var(--africa-color)",
     ]);
+
+  const guideSize = computeGuideSize(sizeTicks, sizeScale);
 
   const header = (
     <div className="header" style={{ width: width }}>
@@ -217,12 +221,19 @@ export default function BubbleChart({ data, width, height, margin }) {
           <SubtitleLeft subtitle="at birth" />
 
           <g
-            transform={`translate(${0.75 * boundsWidth}, ${0.55 * boundsHeight})`}
+            transform={`translate(${0.75 * boundsWidth}, ${0.5 * boundsHeight})`}
+            opacity={hoveredCountry ? 0.2 : 1}
           >
-            <GuideSize scale={sizeScale} ticks={sizeTicks} opacity={0.8} />
+            <GuideColor
+              colorScale={colorScale}
+              width={guideSize.width - 2 * 5}
+              height={guideSize.height - 2 * 5}
+              padding={5}
+            />
           </g>
           <g
             transform={`translate(${0.75 * boundsWidth}, ${0.825 * boundsHeight})`}
+            opacity={hoveredCountry ? 0.2 : 1}
           >
             <GuideSize scale={sizeScale} ticks={sizeTicks} opacity={0.8} />
           </g>

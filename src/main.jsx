@@ -9,7 +9,7 @@ const height = 480;
 
 const MARGIN = {
   top: 10,
-  right: 30,
+  right: 10,
   bottom: 40,
   left: 45,
 };

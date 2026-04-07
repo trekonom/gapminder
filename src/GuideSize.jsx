@@ -28,7 +28,7 @@ export const GuideSize = ({ scale, ticks, opacity }) => {
         height={2 * maxValue + 20 + 5}
         fill="#fff"
         strokeOpacity={0.4}
-        stroke="var(--grid-line)"
+        //stroke="var(--grid-line)"
         rx={5}
         ry={5}
       />
@@ -37,11 +37,10 @@ export const GuideSize = ({ scale, ticks, opacity }) => {
         y={-maxValue - 10}
         className="tick-text"
         alignmentBaseline="middle"
-        opacity={0.8}
         style={{
           fontSize: "10px",
           textAnchor: "middle",
-          fontWeight: "bold",
+          //fontWeight: "bold",
           textTransform: "uppercase",
         }}
       >
