@@ -19,6 +19,20 @@
   fill: var(--grid-line);
 }
 
+.tick-hover-line {
+  color: var(--grid-line);
+  fill: var(--grid-line);
+  stroke: var(--grid-line);
+  stroke-width: 1px;
+  stroke-dasharray: 5 5;
+}
+
+.tick-hover-text {
+  fill: var(--grid-line);
+  font-family: var(--font-roboto);
+  font-size: 12px;
+}
+
 .tick-text {
   fill: var(--grid-line);
   font-family: var(--font-roboto);

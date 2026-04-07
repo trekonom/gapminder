@@ -1,5 +1,30 @@
+import { measureTextWidth } from "./utils";
+
 const TICK_LENGTH = 0;
-const TICK_TEXT_SHIFT = 10;
+const TICK_TEXT_SHIFT = 6;
+
+export const TickLeft = ({ value, label, yScale, opacity }) => (
+  <g className="tick" transform={`translate(0, ${yScale(value)})`}>
+    <line x2={-TICK_LENGTH} stroke="currentColor" opacity={opacity} />
+    <text
+      className="tick-text"
+      opacity={opacity}
+      style={{
+        textAnchor: "end",
+        alignmentBaseline: "middle",
+        transform: `translateX(${-TICK_TEXT_SHIFT}px)`,
+      }}
+    >
+      {label}
+    </text>
+  </g>
+);
+
+export const GridLeft = ({ value, yScale, boundsWidth }) => (
+  <g className="tick" transform={`translate(0, ${yScale(value)})`}>
+    <line x2={boundsWidth} stroke="currentColor" opacity={0.2} />
+  </g>
+);
 
 export const AxisLeft = ({
   yScale,
@@ -7,6 +32,7 @@ export const AxisLeft = ({
   title,
   subtitle,
   boundsWidth,
+  opacity,
 }) => {
   const range = yScale.range();
   const height = range[0] - range[1];
@@ -19,24 +45,21 @@ export const AxisLeft = ({
         fill="none"
         stroke="currentColor"
       />
-      {yScale.ticks(numberOfTicksTarget).map((value) => (
-        <g
-          key={value}
-          className="tick"
-          transform={`translate(0, ${yScale(value)})`}
-        >
-          <line x2={boundsWidth} stroke="currentColor" opacity={0.2} />
-          <line x2={-TICK_LENGTH} stroke="currentColor" />
-          <text
-            className="tick-text"
-            style={{
-              textAnchor: "middle",
-              alignmentBaseline: "middle",
-              transform: `translateX(${-TICK_TEXT_SHIFT}px)`,
-            }}
-          >
-            {value}
-          </text>
+      {yScale.ticks(numberOfTicksTarget).map((value, i) => (
+        <g>
+          <TickLeft
+            key={"tick-left-" + i}
+            value={value}
+            label={value}
+            yScale={yScale}
+            opacity={opacity}
+          />
+          <GridLeft
+            key={"grid-left-" + i}
+            value={value}
+            yScale={yScale}
+            boundsWidth={boundsWidth}
+          />
         </g>
       ))}
 
@@ -54,16 +77,27 @@ export const AxisLeft = ({
       )}
       {/* Axis subtitle */}
       {subtitle && (
-        <text
-          x={0}
-          y={0}
-          textAnchor="end"
-          alignmentBaseline="before-edge"
-          transform="rotate(-90)"
-          className="axis-subtitle"
-        >
-          {subtitle}
-        </text>
+        <g>
+          <rect
+            x={1}
+            y={0}
+            width={12 + 4}
+            height={measureTextWidth(subtitle, "axis-subtitle") + 4}
+            fill="var(--background)"
+            className="label-bg"
+            style={{ transition: "opacity 150ms ease" }}
+          />
+          <text
+            x={0}
+            y={0}
+            textAnchor="end"
+            alignmentBaseline="before-edge"
+            transform="rotate(-90)"
+            className="axis-subtitle"
+          >
+            {subtitle}
+          </text>
+        </g>
       )}
     </>
   );

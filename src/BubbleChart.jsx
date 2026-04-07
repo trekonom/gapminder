@@ -1,9 +1,12 @@
+import { useState } from "react";
 import "./BubbleChart.css";
 import * as d3 from "d3";
-import { AxisBottom } from "./AxisBottom";
-import { AxisLeft } from "./AxisLeft";
+import { AxisBottom, TickBottom } from "./AxisBottom";
+import { AxisLeft, TickLeft } from "./AxisLeft";
 
 export default function BubbleChart({ data, width, height, margin }) {
+  const [hoveredCountry, setHoveredCountry] = useState(null);
+
   const boundsWidth = width - margin.right - margin.left;
   const boundsHeight = height - margin.top - margin.bottom;
 
@@ -20,6 +23,18 @@ export default function BubbleChart({ data, width, height, margin }) {
   const maxValueGridY = 95; //Math.ceil(maxValueY / 1) * 1;
   const maxValueGridSize = Math.ceil(maxValueSize / 1e6) * 1e6;
   const minValueGridSize = Math.floor(minValueSize / 1e6) * 1e6;
+
+  const xTicks = [
+    { value: 250, label: "250" },
+    { value: 500, label: "500" },
+    { value: 1000, label: "1000" },
+    { value: 2000, label: "2000" },
+    { value: 4000, label: "4000" },
+    { value: 8000, label: "8000" },
+    { value: 16000, label: "16k" },
+    { value: 32000, label: "32k" },
+    { value: 64000, label: "64k" },
+  ];
 
   const xScale = d3
     .scaleLog()
@@ -68,22 +83,64 @@ export default function BubbleChart({ data, width, height, margin }) {
     <rect x={0} y={0} width={width} height={height} className="plot-bg" />
   );
 
+  const isActive = hoveredCountry === null;
+
   const allCircles = [...data]
     .sort((a, b) => b.pop - a.pop)
     .map((d, i) => {
+      const isActiveNone = hoveredCountry === null;
+      const isActiveCountry =
+        hoveredCountry && hoveredCountry.country === d.country;
+
       return (
-        <g key={i}>
+        <g
+          key={i}
+          onMouseEnter={() => setHoveredCountry(d)}
+          onMouseLeave={() => {
+            setHoveredCountry(null);
+          }}
+        >
           <circle
             key={"circle-" + i}
             cx={xScale(d.gdpPercap)}
             cy={yScale(d.lifeExp)}
             r={sizeScale(d.pop)}
             fill={colorScale(d.continent)}
-            opacity={0.8}
+            opacity={isActiveNone ? 0.8 : isActiveCountry ? 1 : 0.1}
             stroke={"black"}
             strokeWidth={1}
             strokeOpacity={0.8}
           />
+          {isActiveCountry && (
+            <g>
+              <line
+                className="tick-hover-line"
+                x1={0}
+                y1={yScale(d.lifeExp)}
+                x2={xScale(d.gdpPercap) - sizeScale(d.pop)}
+                y2={yScale(d.lifeExp)}
+              />
+              <line
+                className="tick-hover-line"
+                x1={xScale(d.gdpPercap)}
+                y1={boundsHeight}
+                x2={xScale(d.gdpPercap)}
+                y2={yScale(d.lifeExp) + sizeScale(d.pop)}
+              />
+              <text
+                x={
+                  xScale(d.gdpPercap) +
+                  (d.gdpPercap > 500 ? -1 : 1) * (sizeScale(d.pop) + 2)
+                }
+                y={yScale(d.lifeExp) - sizeScale(d.pop) - 2}
+                textAnchor={d.gdpPercap > 500 ? "end" : "start"}
+                alignmentBaseline="middle"
+                className="tick-hover-text"
+              >
+                {d.country}
+              </text>
+            </g>
+          )}
         </g>
       );
     });
@@ -110,18 +167,21 @@ export default function BubbleChart({ data, width, height, margin }) {
               title="GDP per capita"
               subtitle="PPP (constant 2007 international $)"
               boundsHeight={boundsHeight}
-              ticks={[
-                { value: 250, label: "250" },
-                { value: 500, label: "500" },
-                { value: 1000, label: "1000" },
-                { value: 2000, label: "2000" },
-                { value: 4000, label: "4000" },
-                { value: 8000, label: "8000" },
-                { value: 16000, label: "16k" },
-                { value: 32000, label: "32k" },
-                { value: 64000, label: "64k" },
-              ]}
+              ticks={xTicks}
+              opacity={hoveredCountry ? 0.2 : 1}
             />
+            {hoveredCountry && (
+              <TickBottom
+                value={hoveredCountry.gdpPercap}
+                label={
+                  hoveredCountry.gdpPercap < 10000
+                    ? hoveredCountry.gdpPercap.toFixed(0)
+                    : (hoveredCountry.gdpPercap / 1000).toFixed(1) + "k"
+                }
+                xScale={xScale}
+                boundsHeight={boundsHeight}
+              />
+            )}
           </g>
           <AxisLeft
             yScale={yScale}
@@ -129,7 +189,16 @@ export default function BubbleChart({ data, width, height, margin }) {
             title="Life Expectancy"
             subtitle="at birth"
             boundsWidth={boundsWidth}
+            opacity={hoveredCountry ? 0.2 : 1}
           />
+          {hoveredCountry && (
+            <TickLeft
+              value={hoveredCountry.lifeExp}
+              label={hoveredCountry.lifeExp.toFixed(1)}
+              yScale={yScale}
+              boundsWidth={boundsWidth}
+            />
+          )}
         </g>
       </svg>
       {footer}
