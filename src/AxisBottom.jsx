@@ -1,7 +1,7 @@
 import { measureTextWidth } from "./utils";
 
 const TICK_LENGTH = 0;
-const TICK_TEXT_SHIFT = 10;
+const TICK_TEXT_SHIFT = 1;
 
 export const TickBottom = ({ value, label, xScale, opacity }) => (
   <g transform={`translate(${xScale(value)}, 0)`}>
@@ -11,7 +11,7 @@ export const TickBottom = ({ value, label, xScale, opacity }) => (
       opacity={opacity}
       style={{
         textAnchor: "middle",
-        alignmentBaseline: "middle",
+        alignmentBaseline: "before-edge",
         transform: `translateY(${TICK_TEXT_SHIFT}px)`,
       }}
     >

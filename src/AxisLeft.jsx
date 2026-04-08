@@ -1,7 +1,7 @@
 import { measureTextWidth } from "./utils";
 
 const TICK_LENGTH = 0;
-const TICK_TEXT_SHIFT = 6;
+const TICK_TEXT_SHIFT = 2;
 
 export const TickLeft = ({ value, label, yScale, opacity }) => (
   <g className="tick" transform={`translate(0, ${yScale(value)})`}>
