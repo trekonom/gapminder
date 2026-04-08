@@ -94,7 +94,13 @@ export const AxisBottom = ({
 
       {/* Axis title */}
       {title && (
-        <text x={width / 2} y={35} className="axis-title" textAnchor="middle">
+        <text
+          x={width / 2}
+          y={20}
+          className="axis-title"
+          textAnchor="middle"
+          alignmentBaseline="before-edge"
+        >
           {title}
         </text>
       )}
